@@ -32,10 +32,13 @@ var ECBCurrencies = []string{
 }
 
 // NewECBProvider inits ECB provider record
-func NewECBProvider() *ECB {
+func NewECBProvider(options rates.Options) *ECB {
 	ecb := new(ECB)
 	// init all units
-	for _, unit := range ECBCurrencies {
+	if len(options.Currencies) == 0 {
+		options.Currencies = append(options.Currencies, ECBCurrencies...)
+	}
+	for _, unit := range options.Currencies {
 		if c, err := currency.ParseISO(unit); err == nil {
 			ecb.currencies = append(ecb.currencies, c)
 		}
@@ -97,14 +100,16 @@ func (ecb *ECB) fetch(url string) (ecbRates []rates.Rate, errors []error) {
 				errors = append(errors, err)
 			}
 		}
-		ecbRates = append(ecbRates, rates.Rate{
-			Date:           currentTime,
-			DateString:     timeString,
-			Currency:       currency.EUR,
-			CurrencyString: currency.EUR.String(),
-			Value:          "1.0000",
-		})
 		for _, unit := range ecb.currencies {
+			if unit == currency.EUR {
+				ecbRates = append(ecbRates, rates.Rate{
+					Date:           currentTime,
+					DateString:     timeString,
+					Currency:       currency.EUR,
+					CurrencyString: currency.EUR.String(),
+					Value:          "1.0000",
+				})
+			}
 			for _, item := range day.Rates {
 				if item.Currency == unit.String() {
 					ecbRates = append(ecbRates, rates.Rate{

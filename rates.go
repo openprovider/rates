@@ -3,7 +3,7 @@
 // that can be found in the LICENSE file.
 
 /*
-Package rates 0.0.2
+Package rates 0.0.3
 This package helps to manage exchange rates from any provider
 
 Example 1:
@@ -51,6 +51,16 @@ type Rate struct {
 	CurrencyString string        `json:"currency"`
 	Currency       currency.Unit `json:"-"`
 	Value          interface{}   `json:"value"`
+}
+
+// Options is some specific things for the specific provider
+// It should configure the provider to manage currencies
+type Options struct {
+	// API key/token
+	Token string
+	// List of the currencies which need to get from the provider
+	// If it is empty, should get all of existing currencies from the provider
+	Currencies []string
 }
 
 // Provider holds methods for providers which implement this interface
