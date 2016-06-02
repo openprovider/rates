@@ -20,7 +20,16 @@ import (
 func main() {
 	registry := rates.Registry{
 		// any collection of providers which implement rates.Provider interface
-		providers.NewECBProvider(),
+		providers.NewECBProvider(
+			rates.Options{
+				Currencies: []string{
+					providers.EUR,
+					providers.USD,
+					providers.CHF,
+					providers.HKD,
+				},
+			},
+		),
 	}
 	service := rates.New(registry)
 	rates, errors := service.FetchLast()
