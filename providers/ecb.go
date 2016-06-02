@@ -75,7 +75,7 @@ func (ecb *ECB) FetchHistory() ([]rates.Rate, []error) {
 // FetchLast gets exchange rates for the last day
 func (ecb *ECB) fetch(url string) (ecbRates []rates.Rate, errors []error) {
 	currentTime := time.Now()
-	timeString := currentTime.Format(stdDateTime)
+	date := currentTime.Format(stdDateTime)
 
 	response, err := http.Get(url)
 	if err != nil {
@@ -95,7 +95,7 @@ func (ecb *ECB) fetch(url string) (ecbRates []rates.Rate, errors []error) {
 		if currentTime.Format(stdDate) != day.Date {
 			if t, err := time.Parse(stdDate, day.Date); err == nil {
 				currentTime = t
-				timeString = day.Date + " 00:00:00"
+				date = day.Date + " 00:00:00"
 			} else {
 				errors = append(errors, err)
 			}
@@ -103,21 +103,23 @@ func (ecb *ECB) fetch(url string) (ecbRates []rates.Rate, errors []error) {
 		for _, unit := range ecb.currencies {
 			if unit == currency.EUR {
 				ecbRates = append(ecbRates, rates.Rate{
-					Date:           currentTime,
-					DateString:     timeString,
-					Currency:       currency.EUR,
-					CurrencyString: currency.EUR.String(),
-					Value:          "1.0000",
+					Time:     currentTime,
+					Date:     date,
+					Base:     currency.EUR,
+					Unit:     currency.EUR,
+					Currency: currency.EUR.String() + "/" + currency.EUR.String(),
+					Value:    "1.0000",
 				})
 			}
 			for _, item := range day.Rates {
 				if item.Currency == unit.String() {
 					ecbRates = append(ecbRates, rates.Rate{
-						Date:           currentTime,
-						DateString:     timeString,
-						Currency:       unit,
-						CurrencyString: unit.String(),
-						Value:          item.Rate,
+						Time:     currentTime,
+						Date:     date,
+						Base:     currency.EUR,
+						Unit:     unit,
+						Currency: currency.EUR.String() + "/" + unit.String(),
+						Value:    item.Rate,
 					})
 				}
 			}

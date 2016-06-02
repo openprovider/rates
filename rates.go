@@ -3,7 +3,7 @@
 // that can be found in the LICENSE file.
 
 /*
-Package rates 0.0.4
+Package rates 0.1.0
 This package helps to manage exchange rates from any provider
 
 Example 1: Get all exchange rates for the ECB Provider
@@ -81,12 +81,13 @@ import (
 
 // Rate represent date and currency exchange rates
 type Rate struct {
-	ID             uint64        `json:"id,omitempty"`
-	DateString     string        `json:"date"`
-	Date           time.Time     `json:"-"`
-	CurrencyString string        `json:"currency"`
-	Currency       currency.Unit `json:"-"`
-	Value          interface{}   `json:"value"`
+	ID       uint64        `json:"id,omitempty"`
+	Date     string        `json:"date"`
+	Currency string        `json:"currency"`
+	Time     time.Time     `json:"-"`
+	Base     currency.Unit `json:"-"`
+	Unit     currency.Unit `json:"-"`
+	Value    interface{}   `json:"value"`
 }
 
 // Options is some specific things for the specific provider
@@ -97,6 +98,8 @@ type Options struct {
 	// List of the currencies which need to get from the provider
 	// If it is empty, should get all of existing currencies from the provider
 	Currencies []string
+	// Flexible settings list
+	Settings map[string]interface{}
 }
 
 // Provider holds methods for providers which implement this interface
