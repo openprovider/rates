@@ -81,12 +81,13 @@ import (
 
 // Rate represent date and currency exchange rates
 type Rate struct {
-	ID             uint64        `json:"id,omitempty"`
-	DateString     string        `json:"date"`
-	Date           time.Time     `json:"-"`
-	CurrencyString string        `json:"currency"`
-	Currency       currency.Unit `json:"-"`
-	Value          interface{}   `json:"value"`
+	ID       uint64        `json:"id,omitempty"`
+	Date     string        `json:"date"`
+	Currency string        `json:"currency"`
+	Time     time.Time     `json:"-"`
+	Base     currency.Unit `json:"-"`
+	Unit     currency.Unit `json:"-"`
+	Value    interface{}   `json:"value"`
 }
 
 // Options is some specific things for the specific provider
