@@ -98,6 +98,8 @@ type Options struct {
 	// List of the currencies which need to get from the provider
 	// If it is empty, should get all of existing currencies from the provider
 	Currencies []string
+	// Flexible settings list
+	Settings map[string]interface{}
 }
 
 // Provider holds methods for providers which implement this interface
