@@ -3,7 +3,7 @@
 // that can be found in the LICENSE file.
 
 /*
-Package rates 0.0.2
+Package rates 0.0.3
 This package helps to manage exchange rates from any provider
 
 Example 1:
