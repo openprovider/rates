@@ -1,2 +1,3 @@
 .DS_Store
-examples/examples
+examples/getall/getall
+examples/getopt/getopt

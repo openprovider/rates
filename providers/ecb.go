@@ -32,7 +32,7 @@ var ECBCurrencies = []string{
 }
 
 // NewECBProvider inits ECB provider record
-func NewECBProvider(options rates.Options) *ECB {
+func NewECBProvider(options *rates.Options) *ECB {
 	ecb := new(ECB)
 	// init all units
 	if len(options.Currencies) == 0 {
