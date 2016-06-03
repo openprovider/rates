@@ -1,3 +1,4 @@
 .DS_Store
 examples/getall/getall
 examples/getopt/getopt
+examples/apilayer/apilayer
