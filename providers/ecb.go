@@ -19,12 +19,12 @@ type ECB struct {
 }
 
 const (
-	ratesLastURL    = "http://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml"
-	rates90daysURL  = "http://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist-90d.xml"
-	ratesHistoryURL = "http://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist.xml"
+	ecbLastURL    = "http://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml"
+	ecb90daysURL  = "http://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist-90d.xml"
+	ecbHistoryURL = "http://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist.xml"
 )
 
-// ECBCurrencies are valid values for currency
+// ECBCurrencies are valid types of currencies for that provider
 var ECBCurrencies = []string{
 	AUD, BGN, BRL, CAD, CHF, CNY, CZK, DKK, EUR, GBP, HKD,
 	HRK, HUF, IDR, ILS, INR, JPY, KRW, MXN, MYR, NOK,
@@ -47,7 +47,7 @@ func NewECBProvider(options *rates.Options) *ECB {
 }
 
 // ECB XML envelope
-type envelope struct {
+type ecbEnvelope struct {
 	Data []struct {
 		Date  string `xml:"time,attr"`
 		Rates []struct {
@@ -59,35 +59,35 @@ type envelope struct {
 
 // FetchLast gets exchange rates for the last day
 func (ecb *ECB) FetchLast() ([]rates.Rate, []error) {
-	return ecb.fetch(ratesLastURL)
+	return ecb.fetch(ecbLastURL)
 }
 
 // Fetch90Days gets exchange rates for 90 days
 func (ecb *ECB) Fetch90Days() ([]rates.Rate, []error) {
-	return ecb.fetch(rates90daysURL)
+	return ecb.fetch(ecb90daysURL)
 }
 
 // FetchHistory gets exchange rates for all existing days
 func (ecb *ECB) FetchHistory() ([]rates.Rate, []error) {
-	return ecb.fetch(ratesHistoryURL)
+	return ecb.fetch(ecbHistoryURL)
 }
 
 // FetchLast gets exchange rates for the last day
-func (ecb *ECB) fetch(url string) (ecbRates []rates.Rate, errors []error) {
+func (ecb *ECB) fetch(url string) (ecbRates []rates.Rate, ecbErrors []error) {
 	currentTime := time.Now()
 	date := currentTime.Format(stdDateTime)
 
 	response, err := http.Get(url)
 	if err != nil {
-		errors = append(errors, err)
+		ecbErrors = append(ecbErrors, err)
 		return
 	}
 	defer response.Body.Close()
 
-	var raw envelope
+	var raw ecbEnvelope
 
 	if err := xml.NewDecoder(response.Body).Decode(&raw); err != nil {
-		errors = append(errors, err)
+		ecbErrors = append(ecbErrors, err)
 		return
 	}
 
@@ -97,7 +97,7 @@ func (ecb *ECB) fetch(url string) (ecbRates []rates.Rate, errors []error) {
 				currentTime = t
 				date = day.Date + " 00:00:00"
 			} else {
-				errors = append(errors, err)
+				ecbErrors = append(ecbErrors, err)
 			}
 		}
 		for _, unit := range ecb.currencies {
