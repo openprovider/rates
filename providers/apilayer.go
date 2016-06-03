@@ -8,6 +8,7 @@ import (
 	"encoding/json"
 	"errors"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/openprovider/rates"
@@ -62,6 +63,11 @@ func NewAPILayerProvider(options *rates.Options) *APILayer {
 			}
 		} else {
 			apiLayer.historyURL = apiLayer.lastURL
+		}
+		if len(options.Currencies) < 10 {
+			currencies := strings.Join(options.Currencies, ",")
+			apiLayer.lastURL += "&currencies=" + currencies
+			apiLayer.historyURL += "&currencies=" + currencies
 		}
 	}
 
