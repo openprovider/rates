@@ -3,7 +3,7 @@
 // that can be found in the LICENSE file.
 
 /*
-Package rates 0.1.3
+Package rates 0.2.0
 This package helps to manage exchange rates from any provider
 
 Example 1: Get all exchange rates for the ECB Provider
