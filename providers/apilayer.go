@@ -24,6 +24,7 @@ type APILayer struct {
 }
 
 const (
+	apiLayerName       = "API Layer"
 	apiLayerLastURL    = "http://apilayer.net/api/live"
 	apiLayerHistoryURL = "http://apilayer.net/api/historical"
 )
@@ -89,6 +90,11 @@ type apiLayerEnvelope struct {
 		Type string
 		Info string
 	}
+}
+
+// Name returns name of the provider
+func (al *APILayer) Name() string {
+	return apiLayerName
 }
 
 // FetchLast gets exchange rates for the last day
