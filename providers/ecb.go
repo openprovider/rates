@@ -95,7 +95,7 @@ func (ecb *ECB) fetch(url string) (ecbRates []rates.Rate, ecbErrors []error) {
 		if currentTime.Format(stdDate) != day.Date {
 			if t, err := time.Parse(stdDate, day.Date); err == nil {
 				currentTime = t
-				date = day.Date + " 00:00:00"
+				date = t.Format(stdDateTime)
 			} else {
 				ecbErrors = append(ecbErrors, err)
 			}

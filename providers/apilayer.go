@@ -131,7 +131,7 @@ func (al *APILayer) fetch(url string) (alRates []rates.Rate, alErrors []error) {
 	if raw.Historical {
 		if t, err := time.Parse(stdDate, al.date); err == nil {
 			timestamp = t
-			date = al.date + " 00:00:00"
+			date = t.Format(stdDateTime)
 		}
 	}
 
