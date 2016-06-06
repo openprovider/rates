@@ -9,7 +9,7 @@ import (
 
 func main() {
 	// Get exchange rates for today
-	registry := rates.Registry{
+	service := rates.New(
 		// any collection of providers which implement rates.Provider interface
 		providers.NewAPILayerProvider(
 			&rates.Options{
@@ -22,13 +22,12 @@ func main() {
 				},
 			},
 		),
-	}
-	serviceLast := rates.New(registry)
-	items, errors := serviceLast.FetchLast()
+	)
+	items, errors := service.FetchLast()
 	if len(errors) != 0 {
 		fmt.Println(errors)
 	}
-	fmt.Println("API Layer exchange rates for today")
+	fmt.Println(service.Name(), "exchange rates for today")
 	for index, item := range items {
 		fmt.Printf("%d. %s - %v\r\n", index+1, item.Currency, item.Value)
 	}
@@ -36,7 +35,7 @@ func main() {
 	// Get historical exchange rates
 	settings := make(map[string]interface{})
 	settings["date"] = "2015-01-01"
-	historyProviders := rates.Registry{
+	registry := rates.Registry{
 		providers.NewAPILayerProvider(
 			&rates.Options{
 				Token: "xxx",
@@ -48,12 +47,11 @@ func main() {
 			},
 		),
 	}
-	serviceHistory := rates.New(historyProviders)
-	data, errors := serviceHistory.FetchHistory()
+	data, errors := registry.FetchHistory()
 	if len(errors) != 0 {
 		fmt.Println(errors)
 	}
-	fmt.Println("API Layer exchange rates for", settings["date"])
+	fmt.Println(registry.Name(), "exchange rates for", settings["date"])
 	for index, item := range data {
 		fmt.Printf("%d. %s - %v\r\n", index+1, item.Currency, item.Value)
 	}

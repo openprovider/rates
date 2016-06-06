@@ -19,6 +19,7 @@ type ECB struct {
 }
 
 const (
+	ecbName       = "ECB"
 	ecbLastURL    = "http://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml"
 	ecb90daysURL  = "http://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist-90d.xml"
 	ecbHistoryURL = "http://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist.xml"
@@ -55,6 +56,11 @@ type ecbEnvelope struct {
 			Rate     string `xml:"rate,attr"`
 		} `xml:"Cube"`
 	} `xml:"Cube>Cube"`
+}
+
+// Name returns name of the provider
+func (ecb *ECB) Name() string {
+	return ecbName
 }
 
 // FetchLast gets exchange rates for the last day

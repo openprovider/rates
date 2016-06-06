@@ -18,11 +18,10 @@ Example 1: Get all exchange rates for the ECB Provider
     )
 
     func main() {
-        registry := rates.Registry{
+        service := rates.New(
             // any collection of providers which implement rates.Provider interface
             providers.NewECBProvider(new(rates.Options)),
-        }
-        service := rates.New(registry)
+        )
         rates, errors := service.FetchLast()
         if len(errors) != 0 {
             fmt.Println(errors)
@@ -58,8 +57,7 @@ Example 2: Get exchange rates for EUR, USD, CHF, HKD
                 },
             ),
         }
-        service := rates.New(registry)
-        rates, errors := service.FetchLast()
+        rates, errors := registry.FetchLast()
         if len(errors) != 0 {
             fmt.Println(errors)
         }
@@ -74,6 +72,7 @@ Exchange Rates Provider
 package rates
 
 import (
+	"strings"
 	"time"
 
 	"golang.org/x/text/currency"
@@ -104,6 +103,7 @@ type Options struct {
 
 // Provider holds methods for providers which implement this interface
 type Provider interface {
+	Name() string
 	FetchLast() (rates []Rate, errors []error)
 	FetchHistory() (rates []Rate, errors []error)
 }
@@ -118,6 +118,15 @@ func New(providers ...Provider) Provider {
 		registry = append(registry, provider)
 	}
 	return registry
+}
+
+// Name returns name of the provider
+func (registry Registry) Name() string {
+	var names []string
+	for _, provider := range registry {
+		names = append(names, provider.Name())
+	}
+	return "Registry: " + strings.Join(names, ", ")
 }
 
 // FetchLast returns exchange rates from all registered providers on last day

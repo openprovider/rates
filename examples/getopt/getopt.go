@@ -21,12 +21,11 @@ func main() {
 			},
 		),
 	}
-	service := rates.New(registry)
-	rates, errors := service.FetchLast()
+	rates, errors := registry.FetchLast()
 	if len(errors) != 0 {
 		fmt.Println(errors)
 	}
-	fmt.Println("European Central Bank exchange rates for today")
+	fmt.Println(registry.Name(), "exchange rates for today")
 	for index, rate := range rates {
 		fmt.Printf("%d. %s - %v\r\n", index+1, rate.Currency, rate.Value)
 	}
