@@ -18,6 +18,7 @@ import (
 // APILayer represents multi currency provider
 type APILayer struct {
 	currencies []currency.Unit
+	date       string
 	lastURL    string
 	historyURL string
 }
@@ -60,6 +61,7 @@ func NewAPILayerProvider(options *rates.Options) *APILayer {
 		if v, ok := options.Settings["date"]; ok {
 			if date, ok := v.(string); ok {
 				apiLayer.historyURL = apiLayerHistoryURL + "?access_key=" + options.Token + "&date=" + date
+				apiLayer.date = date
 			}
 		} else {
 			apiLayer.historyURL = apiLayer.lastURL
@@ -75,13 +77,14 @@ func NewAPILayerProvider(options *rates.Options) *APILayer {
 }
 
 type apiLayerEnvelope struct {
-	Success   bool
-	Terms     string
-	Privacy   string
-	TimeStamp int64
-	Source    string
-	Quotes    map[string]interface{}
-	Error     struct {
+	Success    bool
+	Historical bool
+	Terms      string
+	Privacy    string
+	TimeStamp  int64
+	Source     string
+	Quotes     map[string]interface{}
+	Error      struct {
 		Code uint16
 		Type string
 		Info string
@@ -125,6 +128,12 @@ func (al *APILayer) fetch(url string) (alRates []rates.Rate, alErrors []error) {
 	}
 	timestamp := time.Unix(raw.TimeStamp, 0)
 	date := timestamp.Format(stdDateTime)
+	if raw.Historical {
+		if t, err := time.Parse(stdDate, al.date); err == nil {
+			timestamp = t
+			date = t.Format(stdDateTime)
+		}
+	}
 
 	for _, unit := range al.currencies {
 		for item, value := range raw.Quotes {
