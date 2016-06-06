@@ -24,7 +24,7 @@ type APILayer struct {
 }
 
 const (
-	apiLayerName       = "APILayer"
+	apiLayerName       = "API Layer"
 	apiLayerLastURL    = "http://apilayer.net/api/live"
 	apiLayerHistoryURL = "http://apilayer.net/api/historical"
 )

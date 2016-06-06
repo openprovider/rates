@@ -19,7 +19,7 @@ type ECB struct {
 }
 
 const (
-	ecbName       = "ECB"
+	ecbName       = "European Central Bank"
 	ecbLastURL    = "http://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml"
 	ecb90daysURL  = "http://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist-90d.xml"
 	ecbHistoryURL = "http://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist.xml"
