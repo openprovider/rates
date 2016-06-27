@@ -132,15 +132,8 @@ func (al *APILayer) fetch(url string) (alRates []rates.Rate, alErrors []error) {
 		alErrors = append(alErrors, errors.New("Could not determine date"))
 		return
 	}
-	timestamp := time.Unix(raw.TimeStamp, 0)
+	timestamp := time.Unix(raw.TimeStamp, 0).UTC()
 	date := timestamp.Format(stdDateTime)
-	if raw.Historical {
-		if t, err := time.Parse(stdDate, al.date); err == nil {
-			timestamp = t
-			date = t.Format(stdDateTime)
-		}
-	}
-
 	for _, unit := range al.currencies {
 		for item, value := range raw.Quotes {
 			if item == USD+unit.String() {
