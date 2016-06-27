@@ -29,7 +29,7 @@ func main() {
 	}
 	fmt.Println(service.Name(), "exchange rates for today")
 	for index, item := range items {
-		fmt.Printf("%d. %s - %v\r\n", index+1, item.Currency, item.Value)
+		fmt.Printf("%d. %s at %s: %v\r\n", index+1, item.Currency, item.Time, item.Value)
 	}
 
 	// Get historical exchange rates
@@ -53,6 +53,6 @@ func main() {
 	}
 	fmt.Println(registry.Name(), "exchange rates for", settings["date"])
 	for index, item := range data {
-		fmt.Printf("%d. %s - %v\r\n", index+1, item.Currency, item.Value)
+		fmt.Printf("%d. %s at %s: %v\r\n", index+1, item.Currency, item.Time, item.Value)
 	}
 }
